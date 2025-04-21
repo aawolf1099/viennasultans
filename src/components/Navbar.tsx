@@ -24,7 +24,6 @@ const Navbar = () => {
     { name: 'Team', href: '#team' },
     { name: 'Matches', href: '#matches' },
     { name: 'Gallery', href: '#gallery' },
-    { name: 'Contact', href: '#contact' },
   ];
 
   return (
@@ -65,7 +64,7 @@ const Navbar = () => {
                   <Link
                     href={item.href}
                     onClick={(e) => handleScroll(e, item.href.slice(1))}
-                    className="px-3 py-2 text-base font-medium text-[#009cd4] hover:text-[#020123] dark:hover:text-[#DB3986] transition-colors relative group"
+                    className="px-3 py-2 text-base font-medium text-[#009cd4] hover:text-[#DB3986] dark:hover:text-[#DB3986] transition-colors relative group"
                   >
                     {item.name}
                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#DB3986] dark:bg-[#009cd4] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
