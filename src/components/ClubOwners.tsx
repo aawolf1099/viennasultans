@@ -49,7 +49,7 @@ const ClubOwners = () => {
                   <img
                     src={owner.image}
                     alt={owner.name}
-                    className="w-full h-full object-cover opacity-70"
+                    className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="p-6 bg-[#DB3986]">
