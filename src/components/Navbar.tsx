@@ -1,20 +1,38 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/context/ThemeContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (isOpen && !target.closest('nav')) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [isOpen]);
+
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
     const element = document.getElementById(targetId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Close mobile menu
       setIsOpen(false);
+      
+      // Add a small delay before scrolling to ensure the menu is closed
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
   };
 
@@ -46,7 +64,7 @@ const Navbar = () => {
             <Link 
               href="#home" 
               onClick={(e) => handleScroll(e, 'home')}
-              className="text-2xl font-bold ml-6 text-[#009cd4] hover:text-[#020123] dark:hover:text-[#DB3986] transition-colors"
+              className="text-2xl font-bold ml-6 text-[#009cd4] hover:text-[#DB3986] dark:hover:text-[#DB3986] transition-colors"
             >
               Vienna Sultans
             </Link>
@@ -132,29 +150,35 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <motion.div
-        initial={false}
-        animate={{ height: isOpen ? 'auto' : 0 }}
-        className="md:hidden overflow-hidden bg-white dark:bg-[#020123]"
-      >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {navItems.map((item) => (
-            <motion.div
-              key={item.name}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Link
-                href={item.href}
-                onClick={(e) => handleScroll(e, item.href.slice(1))}
-                className="block px-3 py-2 rounded-md text-base font-medium text-[#DB3986] dark:text-gray-300 hover:text-[#020123] dark:hover:text-[#009cd4] hover:bg-gray-100 dark:hover:bg-[#020123]/80 transition-colors"
-              >
-                {item.name}
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden overflow-hidden bg-white dark:bg-[#020123]"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+              {navItems.map((item) => (
+                <motion.div
+                  key={item.name}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Link
+                    href={item.href}
+                    onClick={(e) => handleScroll(e, item.href.slice(1))}
+                    className="block px-3 py-2 rounded-md text-base font-medium text-[#DB3986] dark:text-gray-300 hover:text-[#020123] dark:hover:text-[#009cd4] hover:bg-gray-100 dark:hover:bg-[#020123]/80 transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
