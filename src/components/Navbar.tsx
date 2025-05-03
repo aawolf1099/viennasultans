@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/context/ThemeContext';
+import { useFirebase } from '@/lib/firebase/useFirebase';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useFirebase();
+  const router = useRouter();
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -33,6 +35,15 @@ const Navbar = () => {
       setTimeout(() => {
         element.scrollIntoView({ behavior: 'smooth' });
       }, 100);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
     }
   };
 
@@ -91,45 +102,48 @@ const Navbar = () => {
               ))}
             </div>
             
-            {/* Theme Toggle Button */}
-            <motion.button
-              onClick={toggleTheme}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-full bg-[#DB3986]/10 dark:bg-[#009cd4]/10 text-[#DB3986] dark:text-[#009cd4] hover:bg-[#DB3986]/20 dark:hover:bg-[#009cd4]/20 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              )}
-            </motion.button>
+
+            {/* Login/Logout Button */}
+            {user ? (
+              <motion.button
+                onClick={handleLogout}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-4 py-2 text-sm font-medium text-white  rounded-md hover:bg-[#DB3986]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986]"
+              >
+                Logout
+              </motion.button>
+            ) : (
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm font-medium text-white  rounded-md hover:bg-[#DB3986]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986]"
+              >
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button and theme toggle */}
           <div className="md:hidden flex items-center space-x-4">
-            <motion.button
-              onClick={toggleTheme}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-2 rounded-full bg-[#DB3986]/10 dark:bg-[#009cd4]/10 text-[#DB3986] dark:text-[#009cd4] hover:bg-[#DB3986]/20 dark:hover:bg-[#009cd4]/20 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              )}
-            </motion.button>
+            {/* Mobile Login/Logout Button */}
+            {user ? (
+              <motion.button
+                onClick={handleLogout}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-3 py-1.5 text-sm font-medium text-white bg-[#DB3986] rounded-md hover:bg-[#DB3986]/90"
+              >
+                Logout
+              </motion.button>
+            ) : (
+              <Link
+                href="/login"
+                className="px-3 py-1.5 text-sm font-medium text-white bg-[#DB3986] rounded-md hover:bg-[#DB3986]/90"
+              >
+                Login
+              </Link>
+            )}
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-[#DB3986] dark:text-gray-300 hover:text-[#020123] dark:hover:text-[#009cd4] focus:outline-none"

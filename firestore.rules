@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to all documents
+    match /{document=**} {
+      allow read: if true;
+    }
+    
+    // Allow write access to admins collection only for authenticated users
+    match /admins/{userId} {
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Allow authenticated users to read their own admin document
+    match /admins/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Allow authenticated users to manage players
+    match /players/{playerId} {
+      allow read: if true;  // Anyone can read player data
+      allow write: if request.auth != null;  // Only authenticated users can write
+    }
+  }
+} 

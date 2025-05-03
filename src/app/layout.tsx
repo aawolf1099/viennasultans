@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { ThemeProvider } from '@/context/ThemeContext';
+import { FirebaseProvider } from '@/lib/firebase/useFirebase';
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +21,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider>
-          <Navbar />
-          <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-            {children}
-          </main>
+          <FirebaseProvider>
+            <Navbar />
+            <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+              {children}
+            </main>
+          </FirebaseProvider>
         </ThemeProvider>
       </body>
     </html>

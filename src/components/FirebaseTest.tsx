@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useFirebase } from '@/lib/firebase/useFirebase';
+import { useEffect, useState } from 'react';
 
 interface DebugInfo {
   timestamp: string;
