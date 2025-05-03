@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface ClubOwner {
   name: string;
@@ -9,60 +9,51 @@ interface ClubOwner {
 }
 
 const clubOwners: ClubOwner[] = [
-  {
-    name: "Micheal Subhan",
-    role: "Founder & President",
-    image: "/images/mas.jpg"
-  },
-  {
-    name: "Hammad Rana",
-    role: "Vice President",
-    image: "/images/hammad.jpg"
-  },
-  {
-    name: "Tauqir Asif",
-    role: "Treasurer",
-    image: "/images/tk.jpg"
-  }
+  { name: "Micheal Subhan", role: "Founder & President", image: "/images/mas.jpg" },
+  { name: "Hammad Rana", role: "Vice President", image: "/images/hammad.jpg" },
+  { name: "Tauqir Asif", role: "Treasurer", image: "/images/tk.jpg" },
 ];
 
-const ClubOwners = () => {
-  return (
-    <section id="team" className="py-20 bg-[#020123]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <h2 className="text-3xl font-bold text-left text-[#009cd4] mb-8">Club Owners</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {clubOwners.map((owner, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                className="bg-white dark:bg-[#020123]/80 rounded-lg shadow-lg overflow-hidden border border-[#DB3986]/20 dark:border-[#009cd4]/20"
-              >
-                <div className="w-full h-64 relative">
-                  <img
-                    src={owner.image}
-                    alt={owner.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6 bg-[#DB3986]">
-                  <h3 className="text-xl font-semibold text-white dark:text-white mb-2">{owner.name}</h3>
-                  <p className="text-white">{owner.role}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
+const ClubOwners = () => (
+  <section id="team" className="py-16 bg-[#020123]">
+    {/* Heading */}
+    <div className="text-center mb-12">
+      <h2 className="text-4xl font-bold text-[#00BFFF]">
+        Club Owners
+      </h2>
+      <p className="mt-2 text-gray-300 max-w-lg mx-auto">
+        Meet the dedicated leaders driving our community forward.
+      </p>
+    </div>
 
-export default ClubOwners; 
+    {/* Carousel / Cards */}
+    <div className="relative flex justify-center px-4">
+      <div className="flex flex-row overflow-x-auto sm:overflow-visible space-x-6 px-4 snap-x snap-mandatory scrollbar-hide">
+        {clubOwners.map((owner) => (
+          <div
+            key={owner.name}
+            className="snap-start flex-shrink-0 sm:flex-shrink w-64 sm:w-64 md:w-72 bg-[#0D0D2B] border-l-4 border-[#00BFFF] rounded-2xl p-6 text-center"
+          >
+            <div className="mx-auto w-28 h-28 rounded-full overflow-hidden border-2 border-[#00BFFF] mb-4">
+              <Image
+                src={owner.image}
+                alt={owner.name}
+                width={112}
+                height={112}
+                className="object-cover"
+              />
+            </div>
+            <h3 className="text-xl font-semibold text-white">
+              {owner.name}
+            </h3>
+            <p className="mt-2 text-gray-400">
+              {owner.role}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+export default ClubOwners;
