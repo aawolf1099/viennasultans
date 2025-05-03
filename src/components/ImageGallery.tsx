@@ -1,133 +1,98 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { useState } from 'react';
+import { motion } from "framer-motion";
+import { useState, useEffect, useMemo } from "react";
 
 interface GalleryImage {
   id: number;
   src: string;
   alt: string;
-  category: string;
 }
 
 const galleryImages: GalleryImage[] = [
-  {
-    id: 1,
-    src: '/gallery/team1.jpg',
-    alt: 'Team Photo 1',
-    category: 'Team'
-  },
-  {
-    id: 2,
-    src: '/gallery/team2.jpg',
-    alt: 'Team Photo 2',
-    category: 'Team'
-  },
-  {
-    id: 3,
-    src: '/gallery/match1.jpeg',
-    alt: 'Match Action 1',
-    category: 'Match'
-  },
-  {
-    id: 4,
-    src: '/gallery/match2.jpg',
-    alt: 'Match Action 2',
-    category: 'Match'
-  },
-  {
-    id: 5,
-    src: '/gallery/training1.jpg',
-    alt: 'Training Session 1',
-    category: 'Training'
-  },
-  {
-    id: 6,
-    src: '/gallery/training2.jpeg',
-    alt: 'Training Session 2',
-    category: 'Training'
-  },
-  {
-    id: 7,
-    src: '/gallery/tk.jpg',
-    alt: 'Player Profile',
-    category: 'Players'
-  },
-  {
-    id: 8,
-    src: '/gallery/zubi.jpg',
-    alt: 'Player Profile',
-    category: 'Players'
-  }
+  { id: 1, src: "/gallery/team1.jpg", alt: "Team Photo 1" },
+  { id: 2, src: "/gallery/team2.jpg", alt: "Team Photo 2" },
+  { id: 3, src: "/gallery/match1.jpeg", alt: "Match Action 1" },
+  { id: 4, src: "/gallery/match2.jpg", alt: "Match Action 2" },
+  { id: 5, src: "/gallery/training1.jpg", alt: "Training Session 1" },
+  { id: 6, src: "/gallery/training2.jpeg", alt: "Training Session 2" },
+  { id: 7, src: "/gallery/tk.jpg", alt: "Player Profile" },
+  { id: 8, src: "/gallery/zubi.jpg", alt: "Player Profile" },
 ];
 
-const ImageGallery = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+const ImageGallery: React.FC = () => {
+  const [images, setImages] = useState<GalleryImage[]>([]);
 
-  const filteredImages = selectedCategory === 'all'
-    ? galleryImages
-    : galleryImages.filter(image => image.category.toLowerCase() === selectedCategory.toLowerCase());
+  // Shuffle on mount
+  useEffect(() => {
+    setImages([...galleryImages].sort(() => Math.random() - 0.5));
+  }, []);
+
+  // Prepare a 4x4 grid (16 items) randomly chosen with repetition
+  const gridImages = useMemo(() => {
+    if (images.length === 0) return [];
+    const picks: GalleryImage[] = [];
+    for (let i = 0; i < 16; i++) {
+      const idx = Math.floor(Math.random() * images.length);
+      picks.push(images[idx]);
+    }
+    return picks;
+  }, [images]);
 
   return (
-    <section id="gallery" className="py-20 bg-[#020123]">
+    <section id="gallery" className="py-16 bg-[#020123]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-left"
+          className="text-4xl font-bold text-center text-[#00BFFF] mb-12"
         >
-          <h2 className="text-3xl font-bold text-[#009cd4] mb-8">Gallery</h2>
+          Gallery
+        </motion.h2>
 
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-4 mb-8">
-            {['all', 'team', 'match', 'training', 'players'].map((category) => (
-              <motion.button
-                key={category}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-[#DB3986] text-white'
-                    : 'bg-white dark:bg-[#020123]/80 text-[#DB3986] dark:text-[#009cd4] hover:bg-[#DB3986]/10 dark:hover:bg-[#009cd4]/10'
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </motion.button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {filteredImages.map((image) => (
-              <motion.div
-                key={image.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-                whileHover={{ scale: 1.05 }}
-                className="overflow-hidden rounded-lg border border-[#DB3986]/20 dark:border-[#009cd4]/20"
-              >
-                <div className="relative aspect-square">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    className="object-cover"
+        <div className="overflow-hidden h-[800px] relative">
+          <motion.div
+            className="absolute top-0 w-full"
+            animate={{ y: ["0%", "-50%"] }}
+            transition={{ ease: "linear", duration: 40, repeat: Infinity }}
+          >
+            {/* First grid copy */}
+            <div className="grid grid-cols-4 grid-rows-4 gap-6 mb-6">
+              {gridImages.map((img, idx) => (
+                <div
+                  key={`${img.id}-${idx}`}
+                  className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg"
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="object-cover w-full h-full"
                   />
                 </div>
-                <div className="p-4 bg-white dark:bg-[#020123]/80">
-                  <p className="text-sm text-[#DB3986] dark:text-[#009cd4]">{image.category}</p>
+              ))}
+            </div>
+            {/* Second grid copy for seamless loop */}
+            <div className="grid grid-cols-4 grid-rows-4 gap-6">
+              {gridImages.map((img, idx) => (
+                <div
+                  key={`loop-${img.id}-${idx}`}
+                  className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg"
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="object-cover w-full h-full"
+                  />
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
-export default ImageGallery; 
+export default ImageGallery;
