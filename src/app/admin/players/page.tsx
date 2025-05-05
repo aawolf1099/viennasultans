@@ -15,11 +15,21 @@ interface Player {
   imageUrl?: string;
   stats: {
     matches: number;
+    innings: number;
+    notOuts: number;
     runs: number;
-    wickets: number;
+    highestScore: number;
     average: number;
-    economy: number;
+    ballsFaced: number;
     strikeRate: number;
+    hundreds: number;
+    fifties: number;
+    fours: number;
+    sixes: number;
+    wickets: number;
+    overs: number;
+    runsConceded: number;
+    economy: number;
   };
 }
 
@@ -55,11 +65,21 @@ export default function PlayersList() {
             imageUrl: doc.imageUrl,
             stats: {
               matches: doc.stats?.matches || 0,
+              innings: doc.stats?.innings || 0,
+              notOuts: doc.stats?.notOuts || 0,
               runs: doc.stats?.runs || 0,
-              wickets: doc.stats?.wickets || 0,
+              highestScore: doc.stats?.highestScore || 0,
               average: doc.stats?.average || 0,
-              economy: doc.stats?.economy || 0,
-              strikeRate: doc.stats?.strikeRate || 0
+              ballsFaced: doc.stats?.ballsFaced || 0,
+              strikeRate: doc.stats?.strikeRate || 0,
+              hundreds: doc.stats?.hundreds || 0,
+              fifties: doc.stats?.fifties || 0,
+              fours: doc.stats?.fours || 0,
+              sixes: doc.stats?.sixes || 0,
+              wickets: doc.stats?.wickets || 0,
+              overs: doc.stats?.overs || 0,
+              runsConceded: doc.stats?.runsConceded || 0,
+              economy: doc.stats?.economy || 0
             }
           };
         });
@@ -104,11 +124,21 @@ export default function PlayersList() {
       imageUrl: doc.imageUrl,
       stats: {
         matches: doc.stats?.matches || 0,
+        innings: doc.stats?.innings || 0,
+        notOuts: doc.stats?.notOuts || 0,
         runs: doc.stats?.runs || 0,
-        wickets: doc.stats?.wickets || 0,
+        highestScore: doc.stats?.highestScore || 0,
         average: doc.stats?.average || 0,
-        economy: doc.stats?.economy || 0,
-        strikeRate: doc.stats?.strikeRate || 0
+        ballsFaced: doc.stats?.ballsFaced || 0,
+        strikeRate: doc.stats?.strikeRate || 0,
+        hundreds: doc.stats?.hundreds || 0,
+        fifties: doc.stats?.fifties || 0,
+        fours: doc.stats?.fours || 0,
+        sixes: doc.stats?.sixes || 0,
+        wickets: doc.stats?.wickets || 0,
+        overs: doc.stats?.overs || 0,
+        runsConceded: doc.stats?.runsConceded || 0,
+        economy: doc.stats?.economy || 0
       }
     }));
     setPlayers(mappedPlayers.sort((a, b) => Number(a.id) - Number(b.id)));
@@ -132,7 +162,7 @@ export default function PlayersList() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[95%] mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Player Management
@@ -146,33 +176,33 @@ export default function PlayersList() {
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[80px]"
                   >
                     Actions
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[200px]"
                   >
                     Player Info
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider w-[150px]"
                   >
                     Style
                   </th>
                   <th
                     scope="col"
-                    colSpan={3}
-                    className="px-6 py-3 text-center text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20"
+                    colSpan={8}
+                    className="px-4 py-3 text-center text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20"
                   >
                     Batting Stats
                   </th>
                   <th
                     scope="col"
                     colSpan={3}
-                    className="px-6 py-3 text-center text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20"
+                    className="px-4 py-3 text-center text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20"
                   >
                     Bowling Stats
                   </th>
@@ -180,57 +210,87 @@ export default function PlayersList() {
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Actions
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Name & Role
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Batting/Bowling
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
                   >
                     Matches
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
+                  >
+                    Innings
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
                   >
                     Runs
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
                   >
                     Average
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
                   >
-                    Wickets
+                    SR
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
                   >
-                    Economy
+                    HS
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
                   >
-                    Strike Rate
+                    100s/50s
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/20 w-[80px]"
+                  >
+                    4s/6s
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20 w-[80px]"
+                  >
+                    Wkts
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20 w-[80px]"
+                  >
+                    Overs
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-medium text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/20 w-[80px]"
+                  >
+                    Econ
                   </th>
                 </tr>
               </thead>
@@ -241,7 +301,7 @@ export default function PlayersList() {
                       key={player.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
                           onClick={() => handleEdit(player.id)}
                           className="text-[#DB3986] hover:text-[#DB3986]/90 mr-4"
@@ -249,7 +309,7 @@ export default function PlayersList() {
                           Edit
                         </button>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {player.imageUrl && (
                             <img
@@ -258,11 +318,8 @@ export default function PlayersList() {
                               className="h-10 w-10 rounded-full object-cover"
                             />
                           )}
-                          <div>
-                            <div
-                              onClick={() => console.log('player', player)}
-                              className="text-sm font-medium text-gray-900 dark:text-white"
-                            >
+                          <div className="ml-3">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
                               {player.number}. {player.name}
                             </div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -271,7 +328,7 @@ export default function PlayersList() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900 dark:text-white">
                           <div>{player.battingStyle}</div>
                           <div className="text-gray-500 dark:text-gray-400">
@@ -279,34 +336,59 @@ export default function PlayersList() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
                         <div className="text-sm text-gray-900 dark:text-white">
                           {player.stats.matches || 0}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.innings || 0}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
                         <div className="text-sm text-gray-900 dark:text-white">
                           {player.stats.runs || 0}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
                         <div className="text-sm text-gray-900 dark:text-white">
                           {player.stats.average || 0}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.strikeRate || 0}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.highestScore || 0}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.hundreds || 0}/{player.stats.fifties || 0}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.fours || 0}/{player.stats.sixes || 0}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
                         <div className="text-sm text-gray-900 dark:text-white">
                           {player.stats.wickets || 0}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
+                      <td className="px-4 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
                         <div className="text-sm text-gray-900 dark:text-white">
-                          {player.stats.economy || 0}
+                          {player.stats.overs || 0}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
+                      <td className="px-4 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
                         <div className="text-sm text-gray-900 dark:text-white">
-                          {player.stats.strikeRate || 0}
+                          {player.stats.economy || 0}
                         </div>
                       </td>
                     </tr>
