@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/firebase/useFirebase";
+import UpdatePlayerForm from "@/components/UpdatePlayerForm";
 
 interface Player {
   id: string;
+  number: string;
   name: string;
   role: string;
   battingStyle: string;
   bowlingStyle: string;
-  age: number;
   imageUrl?: string;
   stats: {
     matches: number;
@@ -26,6 +27,7 @@ export default function PlayersList() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const router = useRouter();
   const { user, getCollection } = useFirebase();
 
@@ -38,11 +40,36 @@ export default function PlayersList() {
     const fetchPlayers = async () => {
       try {
         const playersData = await getCollection("players");
+        console.log('Raw players data:', playersData);
+        
+        // Map Firestore documents to Player interface
+        const mappedPlayers = playersData.map(doc => {
+          console.log('Processing document:', doc);
+          return {
+            id: doc.id, // This is the Firestore document ID
+            name: doc.name || '',
+            number: doc.number || '',
+            role: doc.role || '',
+            battingStyle: doc.battingStyle || '',
+            bowlingStyle: doc.bowlingStyle || '',
+            imageUrl: doc.imageUrl,
+            stats: {
+              matches: doc.stats?.matches || 0,
+              runs: doc.stats?.runs || 0,
+              wickets: doc.stats?.wickets || 0,
+              average: doc.stats?.average || 0,
+              economy: doc.stats?.economy || 0,
+              strikeRate: doc.stats?.strikeRate || 0
+            }
+          };
+        });
+        
+        console.log('Mapped players:', mappedPlayers);
+        
         // Sort players by ID
-        // const sortedPlayers = (playersData as unknown as Player[]).sort((a, b) => a.id.localeCompare(b.id));
-        const sortedPlayers = (playersData as unknown as Player[]).sort(
-          (a, b) => Number(a.id) - Number(b.id)
-        );
+        const sortedPlayers = mappedPlayers.sort((a, b) => Number(a.number) - Number(b.number));
+        console.log('Sorted players:', sortedPlayers);
+        
         setPlayers(sortedPlayers);
       } catch (error) {
         setError("Failed to fetch players");
@@ -55,6 +82,37 @@ export default function PlayersList() {
     fetchPlayers();
   }, [user, router, getCollection]);
 
+  const handleEdit = (playerId: string) => {
+    setEditingPlayerId(playerId);
+  };
+
+  const handleCancel = () => {
+    setEditingPlayerId(null);
+  };
+
+  const handleUpdate = async () => {
+    setEditingPlayerId(null);
+    // Refresh the players list
+    const playersData = await getCollection("players");
+    const mappedPlayers = playersData.map(doc => ({
+      id: doc.id,
+      name: doc.name || '',
+      number: doc.number || '',
+      role: doc.role || '',
+      battingStyle: doc.battingStyle || '',
+      bowlingStyle: doc.bowlingStyle || '',
+      imageUrl: doc.imageUrl,
+      stats: {
+        matches: doc.stats?.matches || 0,
+        runs: doc.stats?.runs || 0,
+        wickets: doc.stats?.wickets || 0,
+        average: doc.stats?.average || 0,
+        economy: doc.stats?.economy || 0,
+        strikeRate: doc.stats?.strikeRate || 0
+      }
+    }));
+    setPlayers(mappedPlayers.sort((a, b) => Number(a.id) - Number(b.id)));
+  };
 
   if (loading) {
     return (
@@ -88,6 +146,12 @@ export default function PlayersList() {
                 <tr>
                   <th
                     scope="col"
+                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                  <th
+                    scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Player Info
@@ -112,14 +176,14 @@ export default function PlayersList() {
                   >
                     Bowling Stats
                   </th>
+                </tr>
+                <tr>
                   <th
                     scope="col"
                     className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                   >
                     Actions
                   </th>
-                </tr>
-                <tr>
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
@@ -168,91 +232,92 @@ export default function PlayersList() {
                   >
                     Strike Rate
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                  >
-                    Actions
-                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {players.map((player) => (
-                  <tr
-                    key={player.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        {player.imageUrl && (
-                          <img
-                            src={player.imageUrl}
-                            alt={player.name}
-                            className="h-10 w-10 rounded-full object-cover"
-                          />
-                        )}
-                        <div>
-                          <div
-                            onClick={() => console.log('player', player)}
-                            className="text-sm font-medium text-gray-900 dark:text-white"
-                          >
-                            {player.id}. {player.name}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {player.role}
+                  <>
+                    <tr
+                      key={player.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button
+                          onClick={() => handleEdit(player.id)}
+                          className="text-[#DB3986] hover:text-[#DB3986]/90 mr-4"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          {player.imageUrl && (
+                            <img
+                              src={player.imageUrl}
+                              alt={player.name}
+                              className="h-10 w-10 rounded-full object-cover"
+                            />
+                          )}
+                          <div>
+                            <div
+                              onClick={() => console.log('player', player)}
+                              className="text-sm font-medium text-gray-900 dark:text-white"
+                            >
+                              {player.number}. {player.name}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {player.role}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        <div>{player.battingStyle}</div>
-                        <div className="text-gray-500 dark:text-gray-400">
-                          {player.bowlingStyle}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          <div>{player.battingStyle}</div>
+                          <div className="text-gray-500 dark:text-gray-400">
+                            {player.bowlingStyle}
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {player.stats.matches || 0}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {player.stats.runs || 0}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {player.stats.average || 0}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {player.stats.wickets || 0}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {player.stats.economy || 0}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
-                      <div className="text-sm text-gray-900 dark:text-white">
-                        {player.stats.strikeRate || 0}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() =>
-                          router.push(`/admin/players/${player.id}/edit`)
-                        }
-                        className="text-[#DB3986] hover:text-[#DB3986]/90 mr-4"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.matches || 0}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.runs || 0}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap bg-blue-50 dark:bg-blue-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.average || 0}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.wickets || 0}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.economy || 0}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap bg-green-50 dark:bg-green-900/20">
+                        <div className="text-sm text-gray-900 dark:text-white">
+                          {player.stats.strikeRate || 0}
+                        </div>
+                      </td>
+                    </tr>
+                    {editingPlayerId === player.id && (
+                      <UpdatePlayerForm
+                        player={player}
+                        onCancel={handleCancel}
+                        onUpdate={handleUpdate}
+                      />
+                    )}
+                  </>
                 ))}
               </tbody>
             </table>

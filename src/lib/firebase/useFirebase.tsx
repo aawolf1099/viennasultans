@@ -1,11 +1,17 @@
-"use client"
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+"use client";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   User,
-} from 'firebase/auth';
+} from "firebase/auth";
 import {
   collection,
   doc,
@@ -16,11 +22,19 @@ import {
   deleteDoc,
   DocumentData,
   setDoc,
-} from 'firebase/firestore';
-import { auth, db } from './config';
+} from "firebase/firestore";
+
+import { auth, db } from "./config";
 
 type FirebaseDocumentData = {
-  [key: string]: string | number | boolean | null | undefined | FirebaseDocumentData | FirebaseDocumentData[];
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | FirebaseDocumentData
+    | FirebaseDocumentData[];
 };
 
 interface FirebaseDocument {
@@ -34,10 +48,19 @@ interface FirebaseContextType {
   login: (email: string, password: string) => Promise<User>;
   signup: (email: string, password: string) => Promise<User>;
   logout: () => Promise<void>;
-  getDocument: (collectionName: string, id: string) => Promise<FirebaseDocument | null>;
-  getCollection: (collectionName: string) => Promise<Array<{ id: string } & DocumentData>>;
+  getDocument: (
+    collectionName: string,
+    id: string
+  ) => Promise<FirebaseDocument | null>;
+  getCollection: (
+    collectionName: string
+  ) => Promise<Array<{ id: string } & DocumentData>>;
   addDocument: (collectionName: string, data: DocumentData) => Promise<string>;
-  updateDocument: (collectionName: string, id: string, data: DocumentData) => Promise<void>;
+  updateDocument: (
+    collectionName: string,
+    id: string,
+    data: DocumentData
+  ) => Promise<void>;
   deleteDocument: (collectionName: string, id: string) => Promise<void>;
 }
 
@@ -58,10 +81,14 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       return userCredential.user;
     } catch (error) {
-      console.error('Error logging in:', error);
+      console.error("Error logging in:", error);
       throw error;
     }
   };
@@ -69,25 +96,29 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
   const signup = async (email: string, password: string) => {
     try {
       // First check if any admin exists
-      const admins = await getCollection('admins');
+      const admins = await getCollection("admins");
       if (admins.length > 0) {
-        throw new Error('Admin user already exists. Please log in instead.');
+        throw new Error("Admin user already exists. Please log in instead.");
       }
 
       // Create the user
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
 
       // Add user to admins collection
-      await setDoc(doc(db, 'admins', user.uid), {
+      await setDoc(doc(db, "admins", user.uid), {
         email: user.email,
-        role: 'admin',
+        role: "admin",
         createdAt: new Date().toISOString(),
       });
 
       return user;
     } catch (error) {
-      console.error('Error signing up:', error);
+      console.error("Error signing up:", error);
       throw error;
     }
   };
@@ -96,7 +127,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     try {
       await signOut(auth);
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error("Error logging out:", error);
       throw error;
     }
   };
@@ -110,7 +141,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       }
       return null;
     } catch (error) {
-      console.error('Error getting document:', error);
+      console.error("Error getting document:", error);
       throw error;
     }
   };
@@ -118,10 +149,14 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
   const getCollection = async (collectionName: string) => {
     try {
       const querySnapshot = await getDocs(collection(db, collectionName));
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      
+      return querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id, // This is the Firestore document ID
+          ...data
+        };
+      });
     } catch (error) {
       console.error('Error getting collection:', error);
       throw error;
@@ -133,17 +168,40 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       const docRef = await addDoc(collection(db, collectionName), data);
       return docRef.id;
     } catch (error) {
-      console.error('Error adding document:', error);
+      console.error("Error adding document:", error);
       throw error;
     }
   };
 
-  const updateDocument = async (collectionName: string, id: string, data: DocumentData) => {
+  const updateDocument = async (
+    collectionName: string,
+    id: string,
+    data: DocumentData
+  ) => {
     try {
+     
       const docRef = doc(db, collectionName, id);
-      await updateDoc(docRef, data);
+      if (!data || typeof data !== "object") {
+        throw new Error("Invalid data format for update");
+      }
+
+      const cleanData: DocumentData = {};
+
+      for (const [key, value] of Object.entries(data)) {
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          cleanData[key] = {};
+          for (const [nestedKey, nestedValue] of Object.entries(value)) {
+            cleanData[key][nestedKey] =
+              nestedValue === undefined ? null : nestedValue;
+          }
+        } else {
+          cleanData[key] = value === undefined ? null : value;
+        }
+      }
+
+      await updateDoc(docRef, cleanData);
     } catch (error) {
-      console.error('Error updating document:', error);
+      console.error("❌ Error updating document:", error);
       throw error;
     }
   };
@@ -153,7 +211,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       const docRef = doc(db, collectionName, id);
       await deleteDoc(docRef);
     } catch (error) {
-      console.error('Error deleting document:', error);
+      console.error("Error deleting document:", error);
       throw error;
     }
   };
@@ -181,7 +239,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
 export function useFirebase(): FirebaseContextType {
   const context = useContext(FirebaseContext);
   if (!context) {
-    throw new Error('useFirebase must be used within a FirebaseProvider');
+    throw new Error("useFirebase must be used within a FirebaseProvider");
   }
   return context;
-} 
+}
