@@ -172,17 +172,6 @@ export default function UpdatePlayerForm({ player, onCancel, onUpdate }: UpdateP
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Number</label>
-              <input
-                type="text"
-                name="number"
-                value={formData.number}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#DB3986] focus:ring-[#DB3986] dark:bg-gray-800 dark:border-gray-600 px-4 py-2.5"
-                required
-              />
-            </div>
-            <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
               <select
                 name="role"

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/firebase/useFirebase";
 import UpdatePlayerForm from "@/components/UpdatePlayerForm";
+import AddPlayerForm from "@/components/AddPlayerForm";
 
 interface Player {
   id: string;
@@ -406,6 +407,7 @@ export default function PlayersList() {
           </div>
         </div>
       </div>
+      <AddPlayerForm onAdd={handleUpdate} />
     </div>
   );
 }
