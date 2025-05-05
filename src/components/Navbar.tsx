@@ -24,23 +24,6 @@ const Navbar = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isOpen]);
 
-  const handleScroll = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    targetId: string
-  ) => {
-    e.preventDefault();
-    const element = document.getElementById(targetId);
-    if (element) {
-      // Close mobile menu
-      setIsOpen(false);
-
-      // Add a small delay before scrolling to ensure the menu is closed
-      setTimeout(() => {
-        element.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    }
-  };
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -51,11 +34,11 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Team", href: "#team" },
-    { name: "Matches", href: "#matches" },
-    { name: "Gallery", href: "#gallery" },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/#about" },
+    { name: "Team", href: "/#team" },
+    { name: "Matches", href: "/#matches" },
+    { name: "Gallery", href: "/#gallery" },
   ];
 
   return (
@@ -69,15 +52,16 @@ const Navbar = () => {
             className="flex items-center space-x-2 sm:space-x-4"
           >
             <div className="flex items-center justify-center w-20 h-10 sm:w-24 sm:h-12 overflow-hidden shrink-0">
-              <img
-                src="/images/club-logo.jpg"
-                alt="Vienna Sultans Logo"
-                className="w-full h-full object-contain"
-              />
+              <Link href="/">
+                <img
+                  src="/images/club-logo.jpg"
+                  alt="Vienna Sultans Logo"
+                  className="w-full h-full object-contain cursor-pointer"
+                />
+              </Link>
             </div>
             <Link
-              href="#home"
-              onClick={(e) => handleScroll(e, "home")}
+              href="/"
               className="text-lg sm:text-2xl font-bold text-[#009cd4] hover:text-[#DB3986] dark:hover:text-[#DB3986] transition-colors whitespace-nowrap"
             >
               Vienna Sultans
@@ -95,7 +79,6 @@ const Navbar = () => {
                 >
                   <Link
                     href={item.href}
-                    onClick={(e) => handleScroll(e, item.href.slice(1))}
                     className="px-3 py-2 text-base font-medium text-[#009cd4] hover:text-[#DB3986] dark:hover:text-[#DB3986] transition-colors relative group"
                   >
                     {item.name}
@@ -127,7 +110,7 @@ const Navbar = () => {
             ) : (
               <Link
                 href="/login"
-                className="px-4 py-2 text-sm font-medium text-white  rounded-md hover:bg-[#DB3986]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986]"
+                className="px-4 py-2 text-sm font-medium text-white bg-[#DB3986] rounded-md hover:bg-[#DB3986]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986]"
               >
                 Login
               </Link>
@@ -221,7 +204,6 @@ const Navbar = () => {
                 >
                   <Link
                     href={item.href}
-                    onClick={(e) => handleScroll(e, item.href.slice(1))}
                     className="block px-3 py-2 rounded-md text-base font-medium text-[#DB3986] dark:text-gray-300 hover:text-[#020123] dark:hover:text-[#009cd4] hover:bg-gray-100 dark:hover:bg-[#020123]/80 transition-colors"
                   >
                     {item.name}
