@@ -71,7 +71,9 @@ const Footer = () => {
               </motion.a>
               <motion.a
                 whileHover={{ scale: 1.1 }}
-                href="#"
+                href="https://www.instagram.com/vscc_austria/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white hover:text-white transition-colors"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

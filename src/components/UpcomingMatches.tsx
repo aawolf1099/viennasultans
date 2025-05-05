@@ -14,13 +14,12 @@ interface Match {
 
 const matches: Match[] = [
   // Recent Matches
-  { id: 1, date: "2025-04-20", time: "10:00", venue: "Vienna Cricket Ground", opponent: "Velden Cricket Club", type: "Summer Series Match", result: "won by 3 wickets" },
-  { id: 2, date: "2025-04-22", time: "14:30", venue: "Velden Cricket Ground", opponent: "Salzburg Strikers", type: "Summer Series Match", result: "draw" },
-  { id: 3, date: "2025-04-24", time: "12:00", venue: "Innsbruck Oval", opponent: "Innsbruck Invincibles", type: "Summer Series Match", result: "won by 20 runs" },
+  { id: 1, date: "2025-04-20", time: "10:00", venue: "Velden Cricket Ground", opponent: "Velden Cricket Club", type: "Summer Series Match", result: "won by 3 wickets" },
+  { id: 2, date: "2025-04-20", time: "10:00", venue: "Velden Cricket Ground", opponent: "Velden Cricket Club", type: "Summer Series Match", result: "won by 7 wickets" },
+  { id: 3, date: "2025-04-20", time: "10:00", venue: "Velden Cricket Ground", opponent: "Velden Cricket Club", type: "Summer Series Match", result: "won by 40 runs" },
+  { id: 4, date: "2025-04-20", time: "10:00", venue: "Velden Cricket Ground", opponent: "Velden Cricket Club", type: "Summer Series Match", result: "lost by 4 wickets" },
   // Upcoming Matches
-  { id: 4, date: "2025-05-10", time: "10:00", venue: "Velden Cricket Ground", opponent: "Velden Cricket Club", type: "Summer Series Match" },
-  { id: 5, date: "2025-05-12", time: "15:30", venue: "Vienna Cricket Ground", opponent: "Salzburg Strikers", type: "League Match" },
-  { id: 6, date: "2025-05-18", time: "13:00", venue: "Innsbruck Oval", opponent: "Innsbruck Invincibles", type: "Friendly" },
+  { id: 5, date: "2025-05-11", time: "10:30", venue: "Seebarn Cricket Ground", opponent: "Vienna Royals", type: "Summer Series Match" },
 ];
 
 const formatDate = (dateString: string) => {
