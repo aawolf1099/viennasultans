@@ -157,7 +157,7 @@ export default function UpdatePlayerForm({ player, onCancel, onUpdate }: UpdateP
   return (
     <tr className="bg-gray-50 dark:bg-gray-700/50">
       <td colSpan={9} className="px-6 py-4">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 pb-20">
           {/* Basic Info Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             <div>
@@ -422,21 +422,24 @@ export default function UpdatePlayerForm({ player, onCancel, onUpdate }: UpdateP
             </div>
           </div>
 
-          <div className="flex justify-end space-x-4 mt-4">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986] dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-white bg-[#DB3986] border border-transparent rounded-md hover:bg-[#DB3986]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986] disabled:opacity-50"
-            >
-              {loading ? 'Updating...' : 'Update Player'}
-            </button>
+          {/* Fixed position buttons */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 shadow-lg z-10">
+            <div className="max-w-[95%] mx-auto flex justify-end space-x-4">
+              <button
+                type="button"
+                onClick={onCancel}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986] dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-4 py-2 text-sm font-medium text-white bg-[#DB3986] border border-transparent rounded-md hover:bg-[#DB3986]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986] disabled:opacity-50"
+              >
+                {loading ? 'Updating...' : 'Update Player'}
+              </button>
+            </div>
           </div>
         </form>
       </td>
