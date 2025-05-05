@@ -34,7 +34,7 @@ interface AddPlayerFormProps {
   onAdd: () => void;
 }
 
-const AddPlayerForm = ({ onAdd }: AddPlayerFormProps) => {
+const AddPlayerForm = ({ }: AddPlayerFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { addDocument } = useFirebase();
