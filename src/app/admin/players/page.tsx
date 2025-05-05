@@ -168,6 +168,7 @@ export default function PlayersList() {
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Player Management
           </h1>
+          <AddPlayerForm onAdd={handleUpdate} />
         </div>
 
         <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
@@ -407,7 +408,6 @@ export default function PlayersList() {
           </div>
         </div>
       </div>
-      <AddPlayerForm onAdd={handleUpdate} />
     </div>
   );
 }
