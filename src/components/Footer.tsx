@@ -42,10 +42,11 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <ul className="space-y-2 text-white">
-              <li>Vienna Cricket Ground</li>
-              <li>Prater Park, Vienna</li>
-              <li>+43 123 456 7890</li>
-              <li>info@viennasultans.com</li>
+              <li>Vienna Sultans Cricket Club</li>
+              <li>Vienna, Austria</li>
+              <li>+43 660 67 28 647 </li>
+              <li>vienna.sultans@gmail.com</li>
+              <li>ZRV: 1827304607</li>
             </ul>
           </div>
           <div>

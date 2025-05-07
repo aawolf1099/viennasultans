@@ -7,7 +7,7 @@ const Hero = () => {
   const { theme } = useTheme();
 
   return (
-    <section id="home" className="relative h-screen flex items-center justify-center">
+    <section id="home" className="relative h-screen flex justify-center">
       <div className="absolute inset-0 z-0">
         <img
           src="/images/hero-bg.jpg"
@@ -19,7 +19,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative z-10 text-center px-8"
+        className="relative z-10 text-center py-26"
       >
         <h1 className="text-5xl md:text-7xl font-bold text-white dark:text-white mb-4">
           Vienna Sultans
