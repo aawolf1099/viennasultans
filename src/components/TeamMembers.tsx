@@ -96,11 +96,11 @@ const TeamMembers = () => {
 
       {/* Centered container */}
       <div className="relative max-w-7xl mx-auto">
-        <div className="overflow-x-auto pb-4">
+        <div className="overflow-x-auto pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <motion.div
             className="flex space-x-6 min-w-max"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ ease: "linear", duration: 30, repeat: Infinity }}
+            transition={{ ease: "linear", duration: 40, repeat: Infinity }}
           >
             {loopMembers.map((member, idx) => (
               <div
