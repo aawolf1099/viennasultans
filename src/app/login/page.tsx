@@ -10,7 +10,8 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login, signup, getCollection } = useFirebase();
+  // const { login, signup, getCollection } = useFirebase();
+  const { login } = useFirebase();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,28 +29,28 @@ export default function Login() {
     }
   };
 
-  const handleCreateAdmin = async () => {
-    setError('');
-    setLoading(true);
+  // const handleCreateAdmin = async () => {
+  //   setError('');
+  //   setLoading(true);
 
-    try {
-      // Check if any admin exists
-      const admins = await getCollection('admins');
-      if (admins.length > 0) {
-        setError('Admin user already exists. Please log in instead.');
-        return;
-      }
+  //   try {
+  //     // Check if any admin exists
+  //     const admins = await getCollection('admins');
+  //     if (admins.length > 0) {
+  //       setError('Admin user already exists. Please log in instead.');
+  //       return;
+  //     }
 
-      // Create admin user
-      await signup(email, password);
-      setError('Admin user created successfully. Please log in.');
-    } catch (error) {
-      setError('Failed to create admin user. Please try again.');
-      console.error('Error creating admin:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     // Create admin user
+  //     await signup(email, password);
+  //     setError('Admin user created successfully. Please log in.');
+  //   } catch (error) {
+  //     setError('Failed to create admin user. Please try again.');
+  //     console.error('Error creating admin:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -108,14 +109,14 @@ export default function Login() {
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
             
-            <button
+            {/* <button
               type="button"
               onClick={handleCreateAdmin}
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-[#DB3986] bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#DB3986] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Creating...' : 'Create Admin Account'}
-            </button>
+            </button> */}
           </div>
         </form>
       </div>

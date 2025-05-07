@@ -1,6 +1,6 @@
 "use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 
 interface ClubOwner {
   name: string;
@@ -9,18 +9,28 @@ interface ClubOwner {
 }
 
 const clubOwners: ClubOwner[] = [
-  { name: "Micheal Subhan", role: "Founder & President", image: "/images/mas.jpg" },
-  { name: "Hammad Rana", role: "Vice President", image: "/images/hammad.jpg" },
-  { name: "Tauqir Asif", role: "Treasurer", image: "/images/tk.jpg" },
+  {
+    name: "Michael Subhan",
+    role: "Founder & President",
+    image: "/images/mas.jpg",
+  },
+  {
+    name: "Hammad Rana",
+    role: "Co Founder & Vice President",
+    image: "/images/hammad.jpg",
+  },
+  {
+    name: "Tauqir Asif",
+    role: "Co Founder & Treasurer",
+    image: "/images/tk.jpg",
+  },
 ];
 
 const ClubOwners = () => (
   <section id="team" className="py-16 bg-[#020123]">
     {/* Heading */}
     <div className="text-center mb-12">
-      <h2 className="text-4xl font-bold text-[#00BFFF]">
-        Club Owners
-      </h2>
+      <h2 className="text-4xl font-bold text-[#00BFFF]">Club Owners</h2>
       <p className="mt-2 text-gray-300 max-w-lg mx-auto">
         Meet the dedicated leaders driving our community forward.
       </p>
@@ -43,12 +53,8 @@ const ClubOwners = () => (
                 className="object-cover"
               />
             </div>
-            <h3 className="text-xl font-semibold text-white">
-              {owner.name}
-            </h3>
-            <p className="mt-2 text-gray-400">
-              {owner.role}
-            </p>
+            <h3 className="text-xl font-semibold text-white">{owner.name}</h3>
+            <p className="mt-2 text-gray-400">{owner.role}</p>
           </div>
         ))}
       </div>

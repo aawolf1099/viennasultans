@@ -11,6 +11,7 @@ interface TeamMember {
   role: string;
   imageUrl?: string;
   number: string;
+  notes?: string;
   stats: {
     matches: number;
     runs: number;
@@ -39,6 +40,7 @@ const TeamMembers = () => {
           role: doc.role || "",
           imageUrl: doc.imageUrl,
           number: doc.number || "",
+          notes: doc.notes || "",
           stats: {
             matches: doc.stats?.matches || 0,
             runs: doc.stats?.runs || 0,
@@ -117,7 +119,13 @@ const TeamMembers = () => {
                 </div>
                 <div className="p-6 text-left ">
                   <h3 className="text-xl text-white font-semibold mb-1">
-                    {member.number}. {member.name}
+                    {member.name}
+                    {member.notes && (
+                      <span className="text-sm font-normal text-gray-300">
+                        {" "}
+                        ({member.notes})
+                      </span>
+                    )}
                   </h3>
                   <p className="text-gray-300 mb-4">{member.role}</p>
                   <div className="grid grid-cols-2 gap-x-6 gap-y-1">
