@@ -45,18 +45,17 @@ const Navbar = () => {
     <nav className="fixed w-full z-50 bg-[#000000] dark:bg-[#000000] backdrop-blur-md shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center space-x-2 sm:space-x-4"
-          >
-            <div className="flex items-center justify-center w-20 h-10 sm:w-24 sm:h-12 overflow-hidden shrink-0">
+          <motion.div className="flex items-center space-x-2 sm:space-x-4 perspective-[1000px]">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center overflow-hidden">
               <Link href="/">
-                <img
+                <motion.img
                   src="/images/club-logo.jpg"
                   alt="Vienna Sultans Logo"
                   className="w-full h-full object-contain cursor-pointer"
+                  initial={{ rotateY: 0 }}
+                  animate={{ rotateY: 360 }}
+                  transition={{ duration: 2, ease: "easeInOut" }}
+                  style={{ transformStyle: "preserve-3d" }}
                 />
               </Link>
             </div>
