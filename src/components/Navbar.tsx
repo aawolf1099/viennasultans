@@ -51,12 +51,6 @@ const Navbar = () => {
             transition={{ duration: 0.5 }}
             className="flex items-center space-x-2 sm:space-x-4"
           >
-            <Link
-              href="/"
-              className="text-lg sm:text-2xl font-bold text-[#009cd4] hover:text-[#DB3986] dark:hover:text-[#DB3986] transition-colors whitespace-nowrap"
-            >
-              Vienna Sultans
-            </Link>
             <div className="flex items-center justify-center w-20 h-10 sm:w-24 sm:h-12 overflow-hidden shrink-0">
               <Link href="/">
                 <img
