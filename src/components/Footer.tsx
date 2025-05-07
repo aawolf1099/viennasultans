@@ -43,7 +43,6 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4">Contact</h3>
             <ul className="space-y-2 text-white">
               <li>Vienna Sultans Cricket Club</li>
-              <li>Vienna, Austria</li>
               <li>+43 660 67 28 647 </li>
               <li>vienna.sultans@gmail.com</li>
               <li>ZRV: 1827304607</li>
